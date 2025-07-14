@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aes-bridge"
-version = "2.0.0"
+version = "2.0.2"
 description = "AesBridge is a modern, secure and cross-language AES encryption library"
 authors = [
     { name = "Andrey Izman", email = "izmanw@gmail.com" }
