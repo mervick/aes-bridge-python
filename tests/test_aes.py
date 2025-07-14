@@ -5,7 +5,7 @@ import os
 sys.path.insert(0, os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..')))
 
-from src import encrypt_cbc, decrypt_cbc, encrypt_gcm, decrypt_gcm, encrypt_legacy, decrypt_legacy
+from aes_bridge import encrypt_cbc, decrypt_cbc, encrypt_gcm, decrypt_gcm, encrypt_legacy, decrypt_legacy
 
 class TestAesBridge(unittest.TestCase):
     pass
