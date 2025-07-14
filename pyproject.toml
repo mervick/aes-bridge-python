@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aes-bridge"
+version = "2.0.0"
+description = "AesBridge is a modern, secure and cross-language AES encryption library"
+authors = [
+    { name = "Andrey Izman", email = "izmanw@gmail.com" }
+]
+license = "MIT"
+license-files = ["LICENSE"]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "cryptography"
+]
+classifiers = [
+    "Operating System :: OS Independent",
+    "Operating System :: Unix",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS :: MacOS X",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security :: Cryptography"
+]
+
+[project.urls]
+Homepage = "https://github.com/mervick/aes-bridge-python"
+BugTracker = "https://github.com/mervick/aes-bridge-python/issues"
+Source = "https://github.com/mervick/aes-bridge-python"
+
+[tool.setuptools.packages.find]
+where = ["."]
