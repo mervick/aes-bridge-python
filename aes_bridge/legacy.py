@@ -62,7 +62,7 @@ def decrypt_legacy(enc: str | bytes, passphrase: str | bytes) -> bytes:
     """
     ct = base64.b64decode(enc)
     if ct[:8] != b'Salted__':
-        return ''
+        return b''
     salt = ct[8:16]
     key, iv = __derive_key_and_iv(passphrase, salt)
     cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend()).decryptor()
