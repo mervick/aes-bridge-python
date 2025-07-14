@@ -36,7 +36,7 @@ __all__       = ['encrypt',         'decrypt',
                  'encrypt_cbc',     'decrypt_cbc', 
                  'encrypt_cbc_bin', 'decrypt_cbc_bin',
                  'encrypt_gcm',     'decrypt_gcm', 
-                 'encrypt_gcm_bin', 'decrypt_gcm_bin'
+                 'encrypt_gcm_bin', 'decrypt_gcm_bin',
                  'encrypt_legacy',  'decrypt_legacy']
 __revision__  = "$Id$"
 __author__    = "Andrey Izman"
