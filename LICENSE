@@ -1,9 +1,5 @@
 MIT License
 
-AesBridge is a modern cross-language AES encryption library that provides
-a unified interface for encrypting and decrypting data across multiple
-programming languages and platforms.
-
 Copyright (c) 2018-2025 Andrey Izman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
