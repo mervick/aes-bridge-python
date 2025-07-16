@@ -1,7 +1,7 @@
 # AesBridge Python
 ![CI Status](https://github.com/mervick/aes-bridge-python/actions/workflows/python-tests.yml/badge.svg)
 
-AesBridge is a modern, secure and cross-language AES encryption library that supports **GCM** and **CBC** modes
+**AesBridge** is a modern, secure, and cross-language **AES** encryption library. It offers a unified interface for encrypting and decrypting data across multiple programming languages. Supports **GCM**, **CBC**, and **legacy AES Everywhere** modes.
 
 
 This is the **Python implementation** of the core project.  
@@ -9,10 +9,12 @@ This is the **Python implementation** of the core project.
 
 ## Features
 
-- 🔒 AES-256 encryption in GCM and CBC modes
-- 🌐 Unified cross-language design
+- 🔐 AES-256 encryption in GCM (recommended) and CBC modes
+- 🌍 Unified cross-language design
 - 📦 Compact binary format or base64 output
 - 🐍 Pure Python with zero dependencies (except `cryptography`)
+- ✅ HMAC Integrity: CBC mode includes HMAC verification
+- 🔄 Backward Compatible: Supports legacy AES Everywhere format
 
 ## Quick Start
 
@@ -41,6 +43,21 @@ plaintext = decrypt(ciphertext, "MyStrongPass")
 - `decrypt(ciphertext, passphrase)`  
   Decrypts a base64-encoded string encrypted with AES-GCM.
 
+### GCM Mode (recommended)
+
+- `encrypt_gcm(data, passphrase)`  
+  Encrypts a string using AES-GCM.
+  **Returns:** base64-encoded string.
+
+- `decrypt_gcm(ciphertext, passphrase)`  
+  Decrypts a base64-encoded string encrypted with `encrypt_gcm`.
+
+- `encrypt_gcm_bin(data, passphrase)`  
+  Returns encrypted binary data using AES-GCM.
+
+- `decrypt_gcm_bin(ciphertext, passphrase)`  
+  Decrypts binary data encrypted with `encrypt_gcm_bin`.
+
 ### CBC Mode
 
 - `encrypt_cbc(data, passphrase)`  
@@ -56,21 +73,6 @@ plaintext = decrypt(ciphertext, "MyStrongPass")
 
 - `decrypt_cbc_bin(ciphertext, passphrase)`  
   Decrypts binary data encrypted with `encrypt_cbc_bin` and verifies HMAC.
-
-### GCM Mode
-
-- `encrypt_gcm(data, passphrase)`  
-  Encrypts a string using AES-GCM.
-  **Returns:** base64-encoded string.
-
-- `decrypt_gcm(ciphertext, passphrase)`  
-  Decrypts a base64-encoded string encrypted with `encrypt_gcm`.
-
-- `encrypt_gcm_bin(data, passphrase)`  
-  Returns encrypted binary data using AES-GCM.
-
-- `decrypt_gcm_bin(ciphertext, passphrase)`  
-  Decrypts binary data encrypted with `encrypt_gcm_bin`.
 
 ### Legacy Compatibility
 
