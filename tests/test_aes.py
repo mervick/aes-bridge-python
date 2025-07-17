@@ -97,7 +97,7 @@ def load_dynamic_tests():
         add_test(f'test_{test_key}_encrypt_decrypt_gcm_{idx}', test_encrypt_decrypt_gcm(test_text))
         add_test(f'test_{test_key}_encrypt_decrypt_legacy_{idx}', test_encrypt_decrypt_legacy(test_text))
 
-    for idx, test_case in enumerate(test_data.get('tests', [])):
+    for idx, test_case in enumerate(test_data.get('decrypt', [])):
         test_key = test_case.get('id', f'case_{idx}')
         plaintext = test_case.get('plaintext')
         hex_data = test_case.get('hex')
