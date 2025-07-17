@@ -58,7 +58,7 @@ def encrypt_gcm_bin(plaintext: bytes | str, password: bytes | str) -> bytes:
     encryptor = cipher.encryptor()
     ciphertext = encryptor.update(plaintext) + encryptor.finalize()
 
-    return salt + nonce + ciphertext + encryptor.tag
+    return salt + nonce + ciphertext + encryptor.tag  # type: ignore
 
 def decrypt_gcm_bin(data: bytes | str, password: bytes | str) -> bytes:
     """
