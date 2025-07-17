@@ -29,8 +29,8 @@ def main():
             elif args.action == "decrypt":
                 decrypted = decrypt_cbc(data, args.passphrase)
                 if args.b64:
-                    decrypted = base64.b64encode(decrypted).decode('utf-8')
-                print(decrypted)
+                    decrypted = base64.b64encode(decrypted)
+                print(decrypted.decode('utf-8'))
 
         elif args.mode == "gcm":
             if args.action == "encrypt":
@@ -38,8 +38,8 @@ def main():
             elif args.action == "decrypt":
                 decrypted = decrypt_gcm(data, args.passphrase)
                 if args.b64:
-                    decrypted = base64.b64encode(decrypted).decode('utf-8')
-                print(decrypted)
+                    decrypted = base64.b64encode(decrypted)
+                print(decrypted.decode('utf-8'))
 
         elif args.mode == "legacy":
             if args.action == "encrypt":
@@ -47,8 +47,8 @@ def main():
             elif args.action == "decrypt":
                 decrypted = decrypt_legacy(data, args.passphrase)
                 if args.b64:
-                    decrypted = base64.b64encode(decrypted).decode('utf-8')
-                print(decrypted)
+                    decrypted = base64.b64encode(decrypted)
+                print(decrypted.decode('utf-8'))
 
     except ValueError as e:
         print(f"Error: {e}", file=sys.stderr)
