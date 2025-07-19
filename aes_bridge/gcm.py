@@ -28,31 +28,31 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from common import to_bytes, generate_random
 
 
-def derive_key(password: bytes, salt: bytes) -> bytes:
+def derive_key(passphrase: bytes, salt: bytes) -> bytes:
     return PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
         salt=salt,
         iterations=100_000,
-    ).derive(password)
+    ).derive(passphrase)
 
-def encrypt_gcm_bin(plaintext: bytes | str, password: bytes | str) -> bytes:
+def encrypt_gcm_bin(plaintext: bytes | str, passphrase: bytes | str) -> bytes:
     """
     Encrypt data with AES-GCM.
 
     @param plaintext: Data to encrypt
-    @param password: Encryption password
+    @param passphrase: Encryption passphrase
 
     @return: Encrypted data in format:
              salt(16) + nonce(12) + ciphertext + tag(16)
     """
-    password = to_bytes(password)
+    passphrase = to_bytes(passphrase)
     plaintext = to_bytes(plaintext)
     # salt = urandom(16)
     salt = generate_random(16)
     # nonce = urandom(12)
     nonce = generate_random(12)
-    key = derive_key(password, salt)
+    key = derive_key(passphrase, salt)
 
     cipher = Cipher(algorithms.AES(key), modes.GCM(nonce))
     encryptor = cipher.encryptor()
@@ -60,41 +60,41 @@ def encrypt_gcm_bin(plaintext: bytes | str, password: bytes | str) -> bytes:
 
     return salt + nonce + ciphertext + encryptor.tag  # type: ignore
 
-def decrypt_gcm_bin(data: bytes | str, password: bytes | str) -> bytes:
+def decrypt_gcm_bin(data: bytes | str, passphrase: bytes | str) -> bytes:
     """
     Decrypt data encrypted by encrypt_gcm_bin().
 
     @param data: Base64 encoded encrypted data
-    @param password: Encryption password
+    @param passphrase: Encryption passphrase
     """
     data = to_bytes(data)
-    password = to_bytes(password)
+    passphrase = to_bytes(passphrase)
 
     salt = data[:16]
     nonce = data[16:28]
     tag = data[-16:]
     ciphertext = data[28:-16]
 
-    key = derive_key(password, salt)
+    key = derive_key(passphrase, salt)
 
     cipher = Cipher(algorithms.AES(key), modes.GCM(nonce, tag))
     decryptor = cipher.decryptor()
     return decryptor.update(ciphertext) + decryptor.finalize()
 
-def encrypt_gcm(data: bytes | str, password: bytes | str) -> bytes:
+def encrypt_gcm(data: bytes | str, passphrase: bytes | str) -> bytes:
     """
     Encrypt data using AES-GCM and encode result to base64.
 
     @param data: Data to encrypt
-    @param password: Encryption password
+    @param passphrase: Encryption passphrase
     """
-    return base64.b64encode(encrypt_gcm_bin(data, password))
+    return base64.b64encode(encrypt_gcm_bin(data, passphrase))
 
-def decrypt_gcm(data: bytes | str, password: bytes | str) -> bytes:
+def decrypt_gcm(data: bytes | str, passphrase: bytes | str) -> bytes:
     """
     Decrypt base64 encoded data encrypted by encrypt_gcm().
 
     @param data: Base64 encoded encrypted data
-    @param password: Encryption password
+    @param passphrase: Encryption passphrase
     """
-    return decrypt_gcm_bin(base64.b64decode(to_bytes(data)), password)
+    return decrypt_gcm_bin(base64.b64decode(to_bytes(data)), passphrase)

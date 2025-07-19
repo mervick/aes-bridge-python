@@ -28,31 +28,31 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from common import to_bytes, generate_random
 
 
-def derive_keys(password: bytes, salt: bytes) -> tuple:
+def derive_keys(passphrase: bytes, salt: bytes) -> tuple:
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=64,  # 32 for AES key, 32 for HMAC key
         salt=salt,
         iterations=100_000,
     )
-    key_material = kdf.derive(password)
+    key_material = kdf.derive(passphrase)
     return key_material[:32], key_material[32:]  # AES key, HMAC key
 
-def encrypt_cbc_bin(plaintext: bytes | str, password: bytes | str) -> bytes:
+def encrypt_cbc_bin(plaintext: bytes | str, passphrase: bytes | str) -> bytes:
     """
     Encrypts data using AES-CBC mode with HMAC authentication.
 
     @param plaintext: Data to encrypt
-    @param password: Encryption password
+    @param passphrase: Encryption passphrase
 
-    @return: Encrypted data in format: salt (16 bytes) + IV (16 bytes) + 
+    @return: Encrypted data in format: salt (16 bytes) + IV (16 bytes) +
              ciphertext (variable length) + HMAC tag (32 bytes).
     """
-    password = to_bytes(password)
+    passphrase = to_bytes(passphrase)
     plaintext = to_bytes(plaintext)
     salt = generate_random(16)
     iv = generate_random(16)
-    aes_key, hmac_key = derive_keys(password, salt)
+    aes_key, hmac_key = derive_keys(passphrase, salt)
 
     padder = padding.PKCS7(128).padder()
     padded = padder.update(plaintext) + padder.finalize()
@@ -67,22 +67,22 @@ def encrypt_cbc_bin(plaintext: bytes | str, password: bytes | str) -> bytes:
 
     return salt + iv + ciphertext + tag
 
-def decrypt_cbc_bin(data: bytes | str, password: bytes | str) -> bytes:
+def decrypt_cbc_bin(data: bytes | str, passphrase: bytes | str) -> bytes:
     """
     Decrypts data encrypted with encrypt_cbc_bin() function.
 
     @param data: Encrypted data in format from encrypt_cbc_bin():
                  salt (16) + IV (16) + ciphertext (N) + HMAC (32)
-    @param password: Password used for encryption
+    @param passphrase: passphrase used for encryption
     """
-    password = to_bytes(password)
+    passphrase = to_bytes(passphrase)
     data = to_bytes(data)
     salt = data[:16]
     iv = data[16:32]
     tag = data[-32:]
     ciphertext = data[32:-32]
 
-    aes_key, hmac_key = derive_keys(password, salt)
+    aes_key, hmac_key = derive_keys(passphrase, salt)
 
     mac = hmac.HMAC(hmac_key, hashes.SHA256())
     mac.update(iv + ciphertext)
@@ -95,20 +95,20 @@ def decrypt_cbc_bin(data: bytes | str, password: bytes | str) -> bytes:
     unpadder = padding.PKCS7(128).unpadder()
     return unpadder.update(padded) + unpadder.finalize()
 
-def encrypt_cbc(data: bytes | str, password: bytes | str) -> bytes:
+def encrypt_cbc(data: bytes | str, passphrase: bytes | str) -> bytes:
     """
     Encrypts data and returns result as base64 encoded bytes.
 
     @param data: Data to encrypt
-    @param password: Encryption password
+    @param passphrase: Encryption passphrase
     """
-    return base64.b64encode(encrypt_cbc_bin(data, password))
+    return base64.b64encode(encrypt_cbc_bin(data, passphrase))
 
-def decrypt_cbc(data: bytes | str, password: bytes | str) -> bytes:
+def decrypt_cbc(data: bytes | str, passphrase: bytes | str) -> bytes:
     """
     Decrypts base64 encoded data encrypted with encrypt_cbc().
 
     @param data: Base64 encoded encrypted data
-    @param password: Encryption password
+    @param passphrase: Encryption passphrase
     """
-    return decrypt_cbc_bin(base64.b64decode(data), password)
+    return decrypt_cbc_bin(base64.b64decode(data), passphrase)
