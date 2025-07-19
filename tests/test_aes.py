@@ -1,9 +1,5 @@
 import unittest
 import json
-import sys
-import os
-sys.path.insert(0, os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..')))
 
 from aes_bridge import encrypt_cbc, decrypt_cbc, encrypt_gcm, decrypt_gcm, encrypt_legacy, decrypt_legacy
 
@@ -78,24 +74,24 @@ def load_dynamic_tests():
     test_key = 'plaintext'
     for idx, test_case in enumerate(test_data.get('testdata', {}).get('plaintext', [])):
         test_case = test_case.encode('utf-8')
-        add_test(f'test_{test_key}_encrypt_cbc_not_empty_{idx}', test_encrypt_cbc_not_empty(test_case))
-        add_test(f'test_{test_key}_encrypt_gcm_not_empty_{idx}', test_encrypt_gcm_not_empty(test_case))
-        add_test(f'test_{test_key}_encrypt_legacy_not_empty_{idx}', test_encrypt_legacy_not_empty(test_case))
+        add_test(f'test_0_{test_key}_encrypt_cbc_not_empty_{idx}', test_encrypt_cbc_not_empty(test_case))
+        add_test(f'test_0_{test_key}_encrypt_gcm_not_empty_{idx}', test_encrypt_gcm_not_empty(test_case))
+        add_test(f'test_0_{test_key}_encrypt_legacy_not_empty_{idx}', test_encrypt_legacy_not_empty(test_case))
 
-        add_test(f'test_{test_key}_encrypt_decrypt_cbc_{idx}', test_encrypt_decrypt_cbc(test_case))
-        add_test(f'test_{test_key}_encrypt_decrypt_gcm_{idx}', test_encrypt_decrypt_gcm(test_case))
-        add_test(f'test_{test_key}_encrypt_decrypt_legacy_{idx}', test_encrypt_decrypt_legacy(test_case))
+        add_test(f'test_1_{test_key}_encrypt_decrypt_cbc_{idx}', test_encrypt_decrypt_cbc(test_case))
+        add_test(f'test_1_{test_key}_encrypt_decrypt_gcm_{idx}', test_encrypt_decrypt_gcm(test_case))
+        add_test(f'test_1_{test_key}_encrypt_decrypt_legacy_{idx}', test_encrypt_decrypt_legacy(test_case))
 
     test_key = 'hex'
     for idx, test_case in enumerate(test_data.get('testdata', {}).get('hex', [])):
         test_text = bytes.fromhex(test_case)
-        add_test(f'test_{test_key}_encrypt_cbc_not_empty_{idx}', test_encrypt_cbc_not_empty(test_text))
-        add_test(f'test_{test_key}_encrypt_gcm_not_empty_{idx}', test_encrypt_gcm_not_empty(test_text))
-        add_test(f'test_{test_key}_encrypt_legacy_not_empty_{idx}', test_encrypt_legacy_not_empty(test_text))
+        add_test(f'test_2_{test_key}_encrypt_cbc_not_empty_{idx}', test_encrypt_cbc_not_empty(test_text))
+        add_test(f'test_2_{test_key}_encrypt_gcm_not_empty_{idx}', test_encrypt_gcm_not_empty(test_text))
+        add_test(f'test_2_{test_key}_encrypt_legacy_not_empty_{idx}', test_encrypt_legacy_not_empty(test_text))
 
-        add_test(f'test_{test_key}_encrypt_decrypt_cbc_{idx}', test_encrypt_decrypt_cbc(test_text))
-        add_test(f'test_{test_key}_encrypt_decrypt_gcm_{idx}', test_encrypt_decrypt_gcm(test_text))
-        add_test(f'test_{test_key}_encrypt_decrypt_legacy_{idx}', test_encrypt_decrypt_legacy(test_text))
+        add_test(f'test_3_{test_key}_encrypt_decrypt_cbc_{idx}', test_encrypt_decrypt_cbc(test_text))
+        add_test(f'test_3_{test_key}_encrypt_decrypt_gcm_{idx}', test_encrypt_decrypt_gcm(test_text))
+        add_test(f'test_3_{test_key}_encrypt_decrypt_legacy_{idx}', test_encrypt_decrypt_legacy(test_text))
 
     for idx, test_case in enumerate(test_data.get('decrypt', [])):
         test_key = test_case.get('id', f'case_{idx}')
@@ -116,11 +112,11 @@ def load_dynamic_tests():
             plaintext = bytes.fromhex(hex_data)
 
         if encrypted_cbc is not None:
-            add_test(f'test_decrypt_cbc_{test_key}', test_decrypt_cbc(encrypted_cbc, passphrase, plaintext))
+            add_test(f'test_9_decrypt_cbc_{test_key}', test_decrypt_cbc(encrypted_cbc, passphrase, plaintext))
         if encrypted_gcm is not None:
-            add_test(f'test_decrypt_gcm_{test_key}', test_decrypt_gcm(encrypted_gcm, passphrase, plaintext))
+            add_test(f'test_9_decrypt_gcm_{test_key}', test_decrypt_gcm(encrypted_gcm, passphrase, plaintext))
         if encrypted_legacy is not None:
-            add_test(f'test_decrypt_legacy_{test_key}', test_decrypt_legacy(encrypted_legacy, passphrase, plaintext))
+            add_test(f'test_9_decrypt_legacy_{test_key}', test_decrypt_legacy(encrypted_legacy, passphrase, plaintext))
 
 
 load_dynamic_tests()
