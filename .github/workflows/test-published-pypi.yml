@@ -1,0 +1,48 @@
+name: Test Published PyPI Package
+
+on:
+  workflow_run:
+    workflows: ["Publish Python Package to PyPI"]
+    types:
+      - completed
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test-pypi-package:
+    runs-on: ubuntu-latest
+
+    # _if: github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Extract Tag Version
+      id: get_version
+      run: |
+        TAG_NAME=$(git describe --tags --abbrev=0)
+        VERSION="${TAG_NAME#v}"
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Remove local directory (unsure to use pip module)
+      run: |
+        rm -rf aes_bridge/
+        echo "Directory removed."
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install published pypi package
+      run: |
+        pip install aes-bridge==${{ steps.get_version.outputs.version }}
+        # pip install aes-bridge
+
+    - name: Run tests on installed package
+      run: |
+        python -m unittest discover -v tests
