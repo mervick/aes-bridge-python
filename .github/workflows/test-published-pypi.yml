@@ -29,7 +29,7 @@ jobs:
         VERSION="${TAG_NAME#v}"
         echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-    - name: Remove local directory (unsure to use pip module)
+    - name: Remove local directory (to make sure to use pip module)
       run: |
         rm -rf aes_bridge/
         echo "Directory removed."
