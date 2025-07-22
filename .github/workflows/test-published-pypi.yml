@@ -1,4 +1,4 @@
-name: Test Published PyPI Package
+name: Published PyPI Package
 
 on:
   workflow_run:
