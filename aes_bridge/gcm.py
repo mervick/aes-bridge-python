@@ -36,18 +36,18 @@ def derive_key(passphrase: bytes, salt: bytes) -> bytes:
         iterations=100_000,
     ).derive(passphrase)
 
-def encrypt_gcm_bin(plaintext: bytes | str, passphrase: bytes | str) -> bytes:
+def encrypt_gcm_bin(data: bytes | str, passphrase: bytes | str) -> bytes:
     """
     Encrypt data with AES-GCM.
 
-    @param plaintext: Data to encrypt
+    @param data: Data to encrypt
     @param passphrase: Encryption passphrase
 
     @return: Encrypted data in format:
              salt(16) + nonce(12) + ciphertext + tag(16)
     """
     passphrase = to_bytes(passphrase)
-    plaintext = to_bytes(plaintext)
+    plaintext = to_bytes(data)
     # salt = urandom(16)
     salt = generate_random(16)
     # nonce = urandom(12)
@@ -64,7 +64,7 @@ def decrypt_gcm_bin(data: bytes | str, passphrase: bytes | str) -> bytes:
     """
     Decrypt data encrypted by encrypt_gcm_bin().
 
-    @param data: Base64 encoded encrypted data
+    @param data: Encrypted data
     @param passphrase: Encryption passphrase
     """
     data = to_bytes(data)

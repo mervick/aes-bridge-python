@@ -28,6 +28,7 @@ pip install aes-bridge
 ```
 
 ### Usage
+
 ```python
 from aes_bridge import encrypt, decrypt
 
@@ -43,7 +44,7 @@ plaintext = decrypt(ciphertext, "MyStrongPass")
   Encrypts a string using AES-GCM (default).  
   **Returns:** base64-encoded string.
   
-- `decrypt(ciphertext, passphrase)`  
+- `decrypt(data, passphrase)`  
   Decrypts a base64-encoded string encrypted with AES-GCM.
 
 ### GCM Mode (recommended)
@@ -52,13 +53,13 @@ plaintext = decrypt(ciphertext, "MyStrongPass")
   Encrypts a string using AES-GCM.
   **Returns:** base64-encoded string.
 
-- `decrypt_gcm(ciphertext, passphrase)`  
+- `decrypt_gcm(data, passphrase)`  
   Decrypts a base64-encoded string encrypted with `encrypt_gcm`.
 
 - `encrypt_gcm_bin(data, passphrase)`  
   Returns encrypted binary data using AES-GCM.
 
-- `decrypt_gcm_bin(ciphertext, passphrase)`  
+- `decrypt_gcm_bin(data, passphrase)`  
   Decrypts binary data encrypted with `encrypt_gcm_bin`.
 
 ### CBC Mode
@@ -68,13 +69,13 @@ plaintext = decrypt(ciphertext, "MyStrongPass")
   HMAC is used for integrity verification.  
   **Returns:** base64-encoded string.  
 
-- `decrypt_cbc(ciphertext, passphrase)`  
+- `decrypt_cbc(data, passphrase)`  
   Decrypts a base64-encoded string encrypted with `encrypt_cbc` and verifies HMAC.
 
 - `encrypt_cbc_bin(data, passphrase)`  
   Returns encrypted binary data using AES-CBC with HMAC.
 
-- `decrypt_cbc_bin(ciphertext, passphrase)`  
+- `decrypt_cbc_bin(data, passphrase)`  
   Decrypts binary data encrypted with `encrypt_cbc_bin` and verifies HMAC.
 
 ### Legacy Compatibility
@@ -85,6 +86,6 @@ Their usage is strongly discouraged in new applications.
 - `encrypt_legacy(data, passphrase)`  
   Encrypts a string in the legacy AES Everywhere format.  
 
-- `decrypt_legacy(ciphertext, passphrase)`  
+- `decrypt_legacy(data, passphrase)`  
   Decrypts a string encrypted in the legacy AES Everywhere format.
 

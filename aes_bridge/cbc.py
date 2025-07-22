@@ -38,18 +38,18 @@ def derive_keys(passphrase: bytes, salt: bytes) -> tuple:
     key_material = kdf.derive(passphrase)
     return key_material[:32], key_material[32:]  # AES key, HMAC key
 
-def encrypt_cbc_bin(plaintext: bytes | str, passphrase: bytes | str) -> bytes:
+def encrypt_cbc_bin(data: bytes | str, passphrase: bytes | str) -> bytes:
     """
     Encrypts data using AES-CBC mode with HMAC authentication.
 
-    @param plaintext: Data to encrypt
+    @param data: Data to encrypt
     @param passphrase: Encryption passphrase
 
     @return: Encrypted data in format: salt (16 bytes) + IV (16 bytes) +
              ciphertext (variable length) + HMAC tag (32 bytes).
     """
     passphrase = to_bytes(passphrase)
-    plaintext = to_bytes(plaintext)
+    plaintext = to_bytes(data)
     salt = generate_random(16)
     iv = generate_random(16)
     aes_key, hmac_key = derive_keys(passphrase, salt)

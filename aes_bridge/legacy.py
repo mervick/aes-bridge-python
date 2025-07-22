@@ -33,34 +33,34 @@ KEY_LEN = 32
 IV_LEN = 16
 
 
-def encrypt_legacy(raw: str | bytes, passphrase: str | bytes) -> bytes:
+def encrypt_legacy(data: str | bytes, passphrase: str | bytes) -> bytes:
     """
     Encrypts plaintext using AES-256-CBC with OpenSSL-compatible output (Salted__ + salt + ciphertext),
     then base64-encodes the result.
 
-    @param raw: Plaintext data to encrypt (string or bytes)
+    @param data: Plaintext data to encrypt (string or bytes)
     @param passphrase: Passphrase for key derivation
     @return: Encrypted data, base64-encoded as bytes
     """
     salt = generate_random(8)
     key, iv = __derive_key_and_iv(passphrase, salt)
-    padded = __pkcs7_padding(raw)
+    padded = __pkcs7_padding(data)
     cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend()).encryptor()
     ciphertext = cipher.update(padded) + cipher.finalize()
     return base64.b64encode(b'Salted__' + salt + ciphertext)
 
-def decrypt_legacy(enc: str | bytes, passphrase: str | bytes) -> bytes:
+def decrypt_legacy(data: str | bytes, passphrase: str | bytes) -> bytes:
     """
     Decrypts base64-encoded AES-CBC data with OpenSSL-compatible format (Salted__ + salt + ciphertext).
 
-    @param enc: Encrypted data, base64-encoded string or bytes
+    @param data: Encrypted data, base64-encoded string or bytes
     @param passphrase: Passphrase for key derivation
-    @type enc: str | bytes
+    @type data: str | bytes
     @type passphrase: str | bytes
     @return: Decrypted plaintext as raw bytes
     @rtype: bytes
     """
-    ct = base64.b64decode(enc)
+    ct = base64.b64decode(data)
     if ct[:8] != b'Salted__':
         return b''
     salt = ct[8:16]
