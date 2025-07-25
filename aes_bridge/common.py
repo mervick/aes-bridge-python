@@ -21,21 +21,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import base64
 from os import urandom
-import hashlib
-
-
-_nonce = int.from_bytes(urandom(8), 'big')
 
 def generate_random(size: int) -> bytes:
     """ Generates random bytes of specified size. """
-    global _nonce
-    _nonce += 1
-    nonce_bytes = _nonce.to_bytes(8, 'big')
-    data = urandom(13) + nonce_bytes + urandom(13)
-    return hashlib.sha256(data).digest()[:size]
-
+    return urandom(size)
 
 def to_bytes(s: str | bytes) -> bytes:
     """ Convert string to bytes. """
     return s.encode('utf-8') if isinstance(s, str) else s
+
+def b64url(data: bytes) -> str:
+    return base64.urlsafe_b64encode(data).rstrip(b'=').decode('utf-8')
+
+def b64url_decode(data: str) -> bytes:
+    padded = data + '=' * (-len(data) % 4)
+    return base64.urlsafe_b64decode(padded)

@@ -28,12 +28,21 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from common import to_bytes, generate_random
 
 
-def derive_key(passphrase: bytes, salt: bytes) -> bytes:
+def derive_key_pbkdf2(passphrase: bytes, salt: bytes, iterations: int = 100_000) -> bytes:
+    """
+    Derive a key from a passphrase using PBKDF2-HMAC with SHA256.
+
+    @param passphrase: Passphrase to derive key from
+    @param salt: Salt to use in the derivation
+    @param iterations: Number of iterations to use in the derivation
+
+    @return: The derived key
+    """
     return PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
         salt=salt,
-        iterations=100_000,
+        iterations=iterations,
     ).derive(passphrase)
 
 def encrypt_gcm_bin(data: bytes | str, passphrase: bytes | str) -> bytes:
@@ -52,7 +61,7 @@ def encrypt_gcm_bin(data: bytes | str, passphrase: bytes | str) -> bytes:
     salt = generate_random(16)
     # nonce = urandom(12)
     nonce = generate_random(12)
-    key = derive_key(passphrase, salt)
+    key = derive_key_pbkdf2(passphrase, salt)
 
     cipher = Cipher(algorithms.AES(key), modes.GCM(nonce))
     encryptor = cipher.encryptor()
@@ -75,7 +84,7 @@ def decrypt_gcm_bin(data: bytes | str, passphrase: bytes | str) -> bytes:
     tag = data[-16:]
     ciphertext = data[28:-16]
 
-    key = derive_key(passphrase, salt)
+    key = derive_key_pbkdf2(passphrase, salt)
 
     cipher = Cipher(algorithms.AES(key), modes.GCM(nonce, tag))
     decryptor = cipher.decryptor()
